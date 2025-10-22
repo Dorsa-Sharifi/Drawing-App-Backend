@@ -138,4 +138,7 @@ You can configure database connection and server settings in
 ---
 
 # 📜 License
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+[![React](https://img.shields.io/badge/frontend-React-61dafb?logo=react&logoColor=white)](https://react.dev/)
+[![Backend](https://img.shields.io/badge/backend-Spring%20Boot-6db33f?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+

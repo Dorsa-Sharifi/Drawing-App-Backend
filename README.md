@@ -1,21 +1,141 @@
-# Drawing-App-Backend
+# 🎨 Drawing App
 
-User:
+A simple **React + Spring Boot** web application for drag-and-drop drawing with basic shapes.  
+Users can **import/export** their drawings as JSON files and view **real-time shape statistics**.  
+Each user can save **one painting** on the backend, which persists between sessions.
 
-این بخش به منظور تعریف موجودیت کاربر با یک شناسه به شکل یکتا، نام کاربری و نام نمایشی ایجاد شده. نام کاربری برای ذخیره سازی و نام نمایشی را در رابط کاربری استفاده کردیم. چون شناسه به صورت یکتا تعریف شده پس کلید اصلی در database است.
+---
 
-Painting:
+## 🚀 Features
 
-هر نقاشی یک موجودیت در پایگاه داده است که نام، شناسه و کاربر سازنده، مختصات شکل‌ها و زمان ساخت را در خود ذخیره می‌کند.
+### 🧠 Frontend (React)
+- **Editable Painting Name** – Rename your drawing directly in the header.  
+- **Import / Export** – Save and load drawings (including metadata) as `.json` files.  
+- **Sidebar** – Drag shapes (**circle**, **square**, **triangle**) from the left sidebar.  
+- **Canvas** – Drop shapes on the central canvas and freely position them.  
+- **Shape Removal** – Double-click a shape to remove it from the canvas.  
+- **Shape Counter** – Bottom bar displays shape types and counts in real time.
 
-Repository:
+### ⚙️ Backend (Spring Boot)
+- Each user can **store one painting** at a time (saving again overwrites the previous one).  
+- Supports **user management**, **painting persistence**, and **data retrieval**.  
+- Fully integrated with a **relational database** (e.g., H2 or PostgreSQL).
 
-بخش ریپازیتوری شامل دو فایل UserRepository و PaintingRepository می‌باشد که برای کوئری زدن و دریافت اطلاعات از پایگاه داده استفاده می‌شود.
+---
 
-PaintingController:
+## 🧩 Component Overview
 
-طبق دستور العمل تمرین، باید هر کاربر تنها یک نقاشی را ذخیره کند و در صورت ذخیره مجدد، نقاشی پیشین پاک شود. این موضوع در متد savePainting پیاده‌سازی شده. متناظر با هر نقاشی که ذخیره می‌شود اطلاعات مربوط به آن جهت ذخیره و بازیابی مجدد نیز ذخیره می‌شود. همچنین از طریق شناسه هر کاربر و شناسه هر نقاشی می‌توان به ترتیب خود نقاشی و اطلاعات مربوطه را بازیابی کرد.
+### `App.tsx`
+All components, functions, and handlers used in `App.tsx` are summarized below.
 
-UserController:
+#### **State Management**
+- `paintingName`: Title of the drawing.  
+- `shapes`: Array of placed shapes.  
+- `draggingShape`: Tracks the shape type currently being dragged.
 
-درخواست‌های مرتبط با کاربران را با استفاده از این ریپازیتوری پاسخ داده و لیست تمام کاربران را برمی‌گرداند.
+#### **Handlers**
+- `addShape()`: Adds a shape to the canvas.  
+- `handleDrop()`: Calculates the drop position and adds the shape.  
+- `handleExport()`: Saves the drawing as a JSON file.  
+- `handleImport()`: Loads a drawing from a JSON file.  
+- `removeShape()`: Deletes a shape when double-clicked.
+
+### `ShapeIcon`
+A helper component that renders small shape previews (`circle`, `square`, `triangle`).
+
+---
+
+## 💾 JSON Structure (Import / Export)
+
+Example of how a drawing is stored:
+
+```json
+{
+  "name": "My Painting",
+  "shapes": [
+    {
+      "id": "uuid",
+      "type": "circle",
+      "x": 100,
+      "y": 150
+    }
+  ]
+}
+```
+
+---
+
+# 🖥️ Backend Overview
+
+### 👤 User
+Defines the **User** entity with:
+- unique **ID** (primary key)
+- **username** (used for storage)
+- **display name** (shown in the UI)
+
+### 🖼️ Painting
+Each **Painting** entity stores:
+- name  
+- ID  
+- creator (user)  
+- shape coordinates  
+- creation timestamp  
+
+### 🗂️ Repository
+Contains:
+- `UserRepository`  
+- `PaintingRepository`  
+
+Used for querying and retrieving data from the database.
+
+### 🎨 PaintingController
+Implements the rule that **each user can store only one painting**.  
+If a user saves a new one, the old painting is deleted.  
+All painting metadata is stored and retrievable by user ID or painting ID.
+
+### 👥 UserController
+Handles user-related requests and returns the list of all registered users.
+
+---
+
+# ⚡ Setup Instructions
+
+## 🧠 Frontend (React)
+### Prerequisites
+- Node.js ≥ 18  
+- npm or yarn
+
+### Run Locally
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Then open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## ⚙️ Backend (Spring Boot)
+### Prerequisites
+- Java 17+  
+- Maven or Gradle  
+
+### Run Locally
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+By default, the backend runs at [http://localhost:8080](http://localhost:8080).
+
+You can configure database connection and server settings in  
+`src/main/resources/application.properties`.
+
+---
+
+# 👩‍💻 Authors
+- Dorsa Sharifi Ghombavani – Frontend & Backend Developer 
+
+---
+
+# 📜 License
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
